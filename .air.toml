@@ -1,0 +1,10 @@
+# .air.toml
+
+[build]
+  bin = "tmp/main"         # File binary yang akan dieksekusi
+  cmd = "go build -o ./tmp/main ./cmd/main.go" # Command untuk membangun aplikasi
+  log = "air_errors.log"   # File log error
+  exclude_dir = ["tmp", "vendor", "node_modules"] # Direktori yang dikecualikan dari monitoring
+  include_ext = ["go", "tpl", "html", "sql"] # Ekstensi file yang akan dipantau
+  exclude_ext = ["md", "swp"] # Ekstensi file yang dikecualikan
+  follow_symlink = true
