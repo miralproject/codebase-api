@@ -74,17 +74,18 @@ func main() {
 	// Register routes
 	router.SetupRoutes(app, db, ch)
 
-	go func() {
-		msgs, err := rabbitmq.ConsumeMessages(ch, "testQueue")
-		if err != nil {
-			log.Fatalf("Failed to consume messages: %v", err)
-		}
+	// example consume mq
+	// go func() {
+	// 	msgs, err := rabbitmq.ConsumeMessages(ch, "testQueue")
+	// 	if err != nil {
+	// 		log.Fatalf("Failed to consume messages: %v", err)
+	// 	}
 
-		// Proses pesan yang diterima
-		for msg := range msgs {
-			log.Printf("Received a message: %s", msg.Body)
-		}
-	}()
+	// 	// Proses pesan yang diterima
+	// 	for msg := range msgs {
+	// 		log.Printf("Received a message: %s", msg.Body)
+	// 	}
+	// }()
 
 	// Start server
 	log.Fatal(app.Listen(":" + os.Getenv("PORT")))

@@ -29,6 +29,7 @@ func SetupRoutes(app *fiber.App, db *gorm.DB, ch *amqp.Channel) {
 	api.Get("/users/search", middleware.JwtProtected(), userHandler.Searching)
 	api.Get("/users/:id", middleware.JwtProtected(), userHandler.Detail)
 
+	// Example publish
 	api.Post("/publish", func(c *fiber.Ctx) error {
 		type RequestBody struct {
 			Message string `json:"message"`
@@ -39,7 +40,7 @@ func SetupRoutes(app *fiber.App, db *gorm.DB, ch *amqp.Channel) {
 			return c.Status(fiber.StatusBadRequest).SendString("Invalid request body")
 		}
 
-		err := rabbitmq.PublishMessage(ch, "testQueue", body.Message)
+		err := rabbitmq.PublishMessage(ch, "test-mq-gofiber", body.Message)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).SendString("Failed to publish message")
 		}
