@@ -16,14 +16,15 @@ func SetupRoutes(app *fiber.App, db *gorm.DB, ch *amqp.Channel) {
 	userRepo := repository.NewUserRepository(db)
 	userUseCase := usecase.NewUserUseCase(userRepo)
 	userHandler := handler.NewUserHandler(userUseCase)
+	authHandler := handler.NewAuthHandler(userUseCase)
 
 	api := app.Group("/api/v1")
 	api.Get("/healty", func(c *fiber.Ctx) error { return c.SendString("healty is good!!") })
 
-	api.Post("/auth/register", userHandler.Register)
-	api.Post("/auth/login", userHandler.Login)
-	api.Post("/auth/logout", userHandler.Logout)
-	api.Post("/auth/refresh-token", middleware.JwtProtected(), userHandler.RefreshToken)
+	api.Post("/auth/register", authHandler.Register)
+	api.Post("/auth/login", authHandler.Login)
+	api.Post("/auth/logout", authHandler.Logout)
+	api.Post("/auth/refresh-token", middleware.JwtProtected(), authHandler.RefreshToken)
 
 	api.Get("/users", middleware.JwtProtected(), userHandler.All)
 	api.Get("/users/search", middleware.JwtProtected(), userHandler.Searching)
