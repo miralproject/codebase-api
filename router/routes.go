@@ -2,6 +2,7 @@ package router
 
 import (
 	"codebase-api/config/rabbitmq"
+	"codebase-api/config/storage"
 	"codebase-api/internal/handler"
 	"codebase-api/internal/repository"
 	"codebase-api/internal/usecase"
@@ -48,4 +49,16 @@ func SetupRoutes(app *fiber.App, db *gorm.DB, ch *amqp.Channel) {
 
 		return c.SendString("Message published to RabbitMQ")
 	})
+
+	// Example Redis
+	api.Get("/cache", func(c *fiber.Ctx) error {
+		val, err := storage.RediStorage.Get("test-key")
+		if err != nil {
+			return c.Status(500).SendString("Gagal mengambil data dari Redis")
+		}
+
+		// Return data yang diambil dari Redis
+		return c.SendString(string(val))
+	})
+
 }

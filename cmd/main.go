@@ -3,6 +3,7 @@ package main
 import (
 	"codebase-api/config"
 	"codebase-api/config/rabbitmq"
+	"codebase-api/config/storage"
 	middleware "codebase-api/pkg/middlewares"
 	"codebase-api/router"
 	"log"
@@ -27,6 +28,8 @@ func main() {
 
 	// Initialize Fiber db
 	db := config.InitDB()
+
+	storage.InitRedis()
 
 	// Initialize Fiber app
 	app := fiber.New(fiber.Config{
